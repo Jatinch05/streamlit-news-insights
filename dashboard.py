@@ -18,12 +18,6 @@ st.set_page_config(page_title="News Dashboard", layout="wide")
 st_autorefresh(interval=10 * 60 * 1000, key="refresh")
 
 st.title("🗞️ News Headlines Dashboard")
-st.code(f"""
-__file__ = {__file__}
-cwd = {os.getcwd()}
-files = {os.listdir("data") if os.path.exists("data") else "NO data dir"}
-""")
-
 
 # --- UTILS ---
 
@@ -33,7 +27,6 @@ def fetch_latest_news():
         subprocess.run([
             sys.executable, "src/main.py", "--config", "config.yaml", "--export", "csv"
         ], check=True, cwd=project_root)
-
         st.success("✅ Fetched latest news! Please reload the dashboard.")
     except subprocess.CalledProcessError as e:
         st.error(f"❌ Fetch failed: {e}")
@@ -80,7 +73,7 @@ if st.button("📡 Fetch Latest News"):
     st.rerun()
 
 # --- Load Data ---
-data_path = os.path.join(os.path.dirname(__file__), "../data/headlines-latest.csv")
+data_path = os.path.join(os.path.dirname(__file__), "data/headlines-latest.csv")
 
 if not data_path or not os.path.exists(data_path):
     st.warning("⚠️ No data file found. Please fetch the latest news first.")
