@@ -5,6 +5,7 @@ import yaml
 from fetcher import AsyncFetcher
 from transformer import Transformer
 from storage import Storage
+import os
 
 @click.command()
 @click.option("--config", default="config.yaml", help="Path to config file.")
@@ -12,8 +13,13 @@ from storage import Storage
 @click.option("--export", default="sqlite", type=click.Choice(["sqlite", "parquet", "csv"]))
 def main(config, since, export):
     # Load config
-    with open(config) as f:
+
+    config_path = os.path.abspath(config)
+    if not os.path.exists(config_path):
+        raise FileNotFoundError(f"❌ Config file not found at: {config_path}")
+    with open(config_path, "r") as f:
         cfg = yaml.safe_load(f)
+
 
     fetcher = AsyncFetcher(cfg['sites'], since)
     raw_items = asyncio.run(fetcher.fetch_all())
