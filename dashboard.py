@@ -25,7 +25,7 @@ def fetch_latest_news():
     try:
         project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
         subprocess.run([
-            sys.executable, "-m", "src.main", "--export", "csv"
+            "python", "src/main.py",
         ], check=True, cwd=project_root)
         st.success("✅ Fetched latest news! Please reload the dashboard.")
     except subprocess.CalledProcessError as e:
