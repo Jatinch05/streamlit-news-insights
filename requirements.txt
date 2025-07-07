@@ -5,5 +5,5 @@ wordcloud
 textblob
 feedparser
 python-dateutil
-yaml
+PyYAML
 streamlit-autorefresh
