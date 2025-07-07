@@ -1,10 +1,10 @@
-from src.parser import PARSER_REGISTRY
+from parser import PARSER_REGISTRY
 import asyncio
 import click
 import yaml
-from src.fetcher import AsyncFetcher
-from src.transformer import Transformer
-from src.storage import Storage
+from fetcher import AsyncFetcher
+from transformer import Transformer
+from storage import Storage
 
 @click.command()
 @click.option("--config", default="config.yaml", help="Path to config file.")
