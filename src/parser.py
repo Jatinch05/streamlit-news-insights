@@ -2,8 +2,8 @@
 import feedparser
 from abc import ABC, abstractmethod
 from typing import List, Dict
-from bs4 import BeautifulSoup
-from dateutil import parser as date_parser
+# from bs4 import BeautifulSoup
+# from dateutil import parser as date_parser
 import logging
 
 logger = logging.getLogger(__name__)
