@@ -74,7 +74,8 @@ if st.button("📡 Fetch Latest News"):
     st.rerun()
 
 # --- Load Data ---
-data_path = "data/headlines-latest.csv"
+data_path = os.path.join(os.path.dirname(__file__), "../data/headlines-latest.csv")
+
 if not data_path or not os.path.exists(data_path):
     st.warning("⚠️ No data file found. Please fetch the latest news first.")
     st.stop()
