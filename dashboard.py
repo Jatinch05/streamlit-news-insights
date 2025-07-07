@@ -18,6 +18,12 @@ st.set_page_config(page_title="News Dashboard", layout="wide")
 st_autorefresh(interval=10 * 60 * 1000, key="refresh")
 
 st.title("🗞️ News Headlines Dashboard")
+st.code(f"""
+__file__ = {__file__}
+cwd = {os.getcwd()}
+files = {os.listdir("data") if os.path.exists("data") else "NO data dir"}
+""")
+
 
 # --- UTILS ---
 
