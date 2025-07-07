@@ -4,6 +4,6 @@ matplotlib
 wordcloud
 textblob
 feedparser
-python-dateutil
 PyYAML
+python-dateutil
 streamlit-autorefresh
