@@ -23,19 +23,12 @@ st.title("🗞️ News Headlines Dashboard")
 
 def fetch_latest_news():
     try:
-        project_root = os.path.dirname(__file__)
         subprocess.run([
             sys.executable, "src/main.py", "--config", "config.yaml", "--export", "csv"
-        ], check=True, cwd=project_root)
+        ], check=True)
         st.success("✅ Fetched latest news! Please reload the dashboard.")
     except subprocess.CalledProcessError as e:
         st.error(f"❌ Fetch failed: {e}")
-
-def get_latest_csv():
-    files = glob.glob("data/headlines-*.csv")
-    if not files:
-        return None
-    return max(files, key=os.path.getctime)
 
 @st.cache_data(ttl=60)
 def load_data(path):
@@ -73,9 +66,9 @@ if st.button("📡 Fetch Latest News"):
     st.rerun()
 
 # --- Load Data ---
-data_path = os.path.join(os.path.dirname(__file__), "data/headlines-latest.csv")
+data_path = os.path.join("data", "headlines-latest.csv")
 
-if not data_path or not os.path.exists(data_path):
+if not os.path.exists(data_path):
     st.warning("⚠️ No data file found. Please fetch the latest news first.")
     st.stop()
 
