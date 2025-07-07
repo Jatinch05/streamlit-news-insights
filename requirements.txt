@@ -7,3 +7,4 @@ feedparser
 PyYAML
 python-dateutil
 streamlit-autorefresh
+aiohttp
