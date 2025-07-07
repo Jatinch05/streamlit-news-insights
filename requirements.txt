@@ -8,4 +8,4 @@ PyYAML
 python-dateutil
 streamlit-autorefresh
 aiohttp
-sqlite3
+
