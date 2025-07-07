@@ -29,10 +29,10 @@ files = {os.listdir("data") if os.path.exists("data") else "NO data dir"}
 
 def fetch_latest_news():
     try:
-        project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+        project_root = os.path.dirname(__file__)
         subprocess.run([
-            sys.executable, "main.py", "--config", "../config.yaml", "--export", "csv"
-        ], check=True, cwd="src")
+            sys.executable, "src/main.py", "--config", "config.yaml", "--export", "csv"
+        ], check=True, cwd=project_root)
 
         st.success("✅ Fetched latest news! Please reload the dashboard.")
     except subprocess.CalledProcessError as e:
