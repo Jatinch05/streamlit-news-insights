@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 import os
 import yaml
 import asyncio
@@ -13,7 +12,7 @@ def main():
     os.makedirs("samples", exist_ok=True)
     for item in raw_items:
         name = item["site"]
-        ext  = "xml" if name.endswith("_rss") else "html"
+        ext = "xml" if "<rss" in item["html"] or "<?xml" in item["html"] else "html"
         path = os.path.join("samples", f"{name}.{ext}")
         with open(path, "w", encoding="utf-8") as f:
             f.write(item["html"])
