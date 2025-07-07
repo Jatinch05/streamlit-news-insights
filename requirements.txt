@@ -6,3 +6,4 @@ textblob
 feedparser
 python-dateutil
 yaml
+streamlit-autorefresh
