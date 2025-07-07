@@ -1,73 +1,38 @@
-# src/storage.py
-
 import os
-import asyncio
-import aiosqlite
 import pandas as pd
 from datetime import datetime
-from typing import List, Dict
 
 class Storage:
-    def __init__(self, db_path: str):
+    def __init__(self, db_path):
         self.db_path = db_path
-        # Ensure the data directory exists
-        os.makedirs(os.path.dirname(db_path), exist_ok=True)
 
-    def save(self, records: List[Dict], export: str):
-        """
-        Persist records to the specified storage format.
-        export: one of "sqlite", "csv", or "parquet"
-        """
-        if export == "sqlite":
-            # Run the async upsert in the event loop
-            asyncio.run(self._save_sqlite(records))
-        else:
-            # CSV or Parquet via Pandas
-            self._save_file(records, export)
-
-    async def _save_sqlite(self, records: List[Dict]):
-        # Connect (creates file if not exists)
-        async with aiosqlite.connect(self.db_path) as db:
-            # Create table if missing
-            await db.execute("""
-                CREATE TABLE IF NOT EXISTS headlines (
-                    source       TEXT,
-                    headline     TEXT,
-                    url          TEXT PRIMARY KEY,
-                    published_at TEXT
-                )
-            """)
-            # Upsert each record
-            for rec in records:
-                await db.execute("""
-                    INSERT INTO headlines(source, headline, url, published_at)
-                    VALUES (?, ?, ?, ?)
-                    ON CONFLICT(url) DO UPDATE SET
-                      source = excluded.source,
-                      headline = excluded.headline,
-                      published_at = excluded.published_at
-                """, (
-                    rec["source"],
-                    rec["headline"],
-                    rec["url"],
-                    rec["published_at"]
-                ))
-            await db.commit()
-
-    def _save_file(self, records: List[Dict], export: str):
-        # Build DataFrame
+    def save(self, records, export_format, filename=None):
         df = pd.DataFrame(records)
-        # Make sure data/ exists
-        out_dir = os.path.dirname(self.db_path)
-        os.makedirs(out_dir, exist_ok=True)
+        if df.empty:
+            print("No records to save.")
+            return
 
-        # Filename with date
-        date_str = datetime.utcnow().strftime("%Y-%m-%d")
-        if export == "csv":
-            path = os.path.join(out_dir, f"headlines-{date_str}.csv")
-            df.to_csv(path, index=False)
-        else:  # parquet
-            path = os.path.join(out_dir, f"headlines-{date_str}.parquet")
-            df.to_parquet(path, index=False)
+        # Ensure the data directory exists
+        os.makedirs("data", exist_ok=True)
 
-        print(f"Wrote {len(df)} records to {path}")
+        if export_format == "csv":
+            if not filename:
+                date = datetime.utcnow().strftime("%Y-%m-%d")
+                filename = f"data/headlines-{date}.csv"
+            df.to_csv(filename, index=False)
+            print(f"Wrote {len(df)} records to {filename}")
+
+        elif export_format == "parquet":
+            filename = filename or self.db_path.replace(".db", ".parquet")
+            df.to_parquet(filename, index=False)
+            print(f"Wrote {len(df)} records to {filename}")
+
+        elif export_format == "sqlite":
+            import sqlite3
+            conn = sqlite3.connect(self.db_path)
+            df.to_sql("headlines", conn, if_exists="replace", index=False)
+            conn.close()
+            print(f"Wrote {len(df)} records to {self.db_path}")
+
+        else:
+            raise ValueError(f"Unsupported export format: {export_format}")
