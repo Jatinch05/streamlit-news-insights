@@ -69,9 +69,11 @@ def interpret_sentiment(score):
 # --- Manual Refresh ---
 if st.button("📡 Fetch Latest News"):
     fetch_latest_news()
+    st.cache_data.clear()
+    st.rerun()
 
 # --- Load Data ---
-data_path = get_latest_csv()
+data_path = "data/headlines-latest.csv"
 if not data_path or not os.path.exists(data_path):
     st.warning("⚠️ No data file found. Please fetch the latest news first.")
     st.stop()

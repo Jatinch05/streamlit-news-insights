@@ -34,7 +34,8 @@ def main(config, since, export):
 
 
     storage = Storage(cfg['database']['path'])
-    storage.save(records, export)
+    storage.save(records, export, filename="data/headlines-latest.csv")
+
 
     click.echo(f"Saved {len(records)} records to {export}.")
 
