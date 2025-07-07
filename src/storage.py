@@ -12,7 +12,6 @@ class Storage:
             print("No records to save.")
             return
 
-        # Ensure the data directory exists
         os.makedirs("data", exist_ok=True)
 
         if export_format == "csv":
@@ -33,6 +32,3 @@ class Storage:
             df.to_sql("headlines", conn, if_exists="replace", index=False)
             conn.close()
             print(f"Wrote {len(df)} records to {self.db_path}")
-
-        else:
-            raise ValueError(f"Unsupported export format: {export_format}")
