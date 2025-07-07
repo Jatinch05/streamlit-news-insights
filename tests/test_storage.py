@@ -1,11 +1,7 @@
-# tests/test_storage.py
-
+import sqlite3
 import pandas as pd
 
-def test_csv():
-    df = pd.read_csv("data/headlines-2025-07-02.csv", parse_dates=["published_at"])
-    print(df["source"].value_counts())
-    print(df[df["source"] == "bbc"].sort_values("published_at", ascending=False).head())
-
-if __name__ == "__main__":
-    test_csv()
+conn = sqlite3.connect("data/headlines.db")
+df = pd.read_sql("SELECT source, COUNT(*) as count FROM headlines GROUP BY source", conn)
+print(df)
+conn.close()
