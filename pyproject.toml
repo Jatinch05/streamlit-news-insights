@@ -1,0 +1,13 @@
+[tool.poetry]
+name = "async-scraper"
+version = "0.1.0"
+description = "Concurrent headline scraper & ETL pipeline"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+aiohttp = "^3.8"
+aiosqlite = "^0.18"
+PyYAML = "^6.0"
+beautifulsoup4 = "^4.12"
+click = "^8.1"
+pandas = "^2.0"

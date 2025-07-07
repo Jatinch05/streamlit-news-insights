@@ -1,0 +1,8 @@
+streamlit
+pandas
+matplotlib
+wordcloud
+textblob
+python-dateutil
+feedparser
+streamlit-autorefresh
