@@ -25,11 +25,6 @@ A real-time, sentiment-aware dashboard that scrapes, analyzes, and visualizes ne
 - **Storage**: SQLite, CSV
 - **Automation**: GitHub Actions (daily scraping)
 
----
-
-## 📊 Dashboard Preview
-
-![Dashboard Screenshot]("C:\Users\jatin\OneDrive\Pictures\Screenshots\Screenshot 2025-07-08 184701.png")
 
 ---
 
@@ -98,7 +93,12 @@ A real-time, sentiment-aware dashboard that scrapes, analyzes, and visualizes ne
 
 
 ---
+## Live Demo
 
+https://app-news-insights-ebknpgf3dwd9mmisu2tdby.streamlit.app/
+
+---
 ## 📄 License
 
 MIT License – feel free to use, modify, and contribute.
+
