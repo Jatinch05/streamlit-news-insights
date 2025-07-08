@@ -6,7 +6,7 @@ class AsyncFetcher:
     def __init__(self, sites: List[Dict[str, Any]], since: str = None):
         self.sites = sites
         self.since = since
-        self.semaphore = asyncio.Semaphore(10)  # global concurrency limit
+        self.semaphore = asyncio.Semaphore(10)
         self.session = None
 
     async def _fetch_site(self, site: Dict[str, Any]) -> List[Dict[str, Any]]:
@@ -17,8 +17,8 @@ class AsyncFetcher:
         async with self.semaphore:
             async with self.session.get(site['url'], timeout=10) as resp:
                 resp.raise_for_status()
-                html = await resp.text()
-                return [{'site': site['name'], 'html': html}]
+                data = await resp.text()
+                return [{'site': site['name'], 'data': data}]
 
     async def fetch_all(self) -> List[Dict[str, Any]]:
         """
@@ -29,11 +29,10 @@ class AsyncFetcher:
             tasks = [self._fetch_site(site) for site in self.sites]
             results = await asyncio.gather(*tasks, return_exceptions=True)
 
-        # Flatten results and log errors
         items = []
         for result in results:
             if isinstance(result, Exception):
-                print(f"Fetch error: {result}")  # replace with proper logging
+                print(f"Fetch error: {result}")
             else:
                 items.extend(result)
         return items

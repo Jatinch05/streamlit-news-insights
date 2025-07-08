@@ -11,15 +11,14 @@ from io import StringIO
 from datetime import datetime
 from streamlit_autorefresh import st_autorefresh
 
-# Set layout
+
 st.set_page_config(page_title="News Dashboard", layout="wide")
 
-# Auto-refresh every 10 minutes
+
 st_autorefresh(interval=10 * 60 * 1000, key="refresh")
 
 st.title("News Headlines Dashboard")
 
-# --- UTILS ---
 
 def fetch_latest_news():
     try:
@@ -47,7 +46,7 @@ def load_data(path):
         st.warning("The data file is empty or malformed.")
         st.stop()
 
-# --- Sentiment Interpretation ---
+
 def interpret_sentiment(score):
     if score <= -0.5:
         return "Very Negative"
@@ -60,13 +59,13 @@ def interpret_sentiment(score):
     else:
         return "Very Positive"
 
-# --- Manual Refresh ---
+
 if st.button("Fetch Latest News"):
     fetch_latest_news()
     st.cache_data.clear()
     st.rerun()
 
-# --- Load Data ---
+
 import sqlite3
 
 def load_data_sqlite(db_path):
@@ -89,7 +88,7 @@ df["published_at"] = pd.to_datetime(df["published_at"], errors="coerce")
 df = df.dropna(subset=["published_at"])
 st.caption(f"Loaded: `{data_path}`")
 
-# --- Filters ---
+
 st.sidebar.header("Filters")
 
 min_date = df["published_at"].dt.date.min()
@@ -109,7 +108,7 @@ date_range = st.sidebar.date_input(
 
 query = st.sidebar.text_input("Search in headlines", "")
 
-# --- Apply Filters ---
+
 mask = (
     df["source"].isin(sources) &
     df["published_at"].dt.date.between(*date_range)
@@ -123,14 +122,13 @@ if filtered.empty:
     st.warning("No articles match the current filters.")
     st.stop()
 
-# --- Enrich with sentiment and hour ---
+
 filtered["sentiment"] = filtered["headline"].apply(lambda h: TextBlob(h).sentiment.polarity)
 filtered["hour"] = filtered["published_at"].dt.hour
 filtered["headline_link"] = filtered.apply(
     lambda row: f"[{row['headline']}]({row['url']})", axis=1
 )
 
-# --- Summary Stats ---
 st.subheader("Summary")
 col1, col2, col3 = st.columns(3)
 
@@ -141,7 +139,6 @@ col1.metric("Total Articles", len(filtered))
 col2.metric("Avg Sentiment", f"{avg_sentiment:.2f}", sentiment_label)
 col3.metric("Sources", ", ".join(filtered["source"].unique()))
 
-# --- Export filtered results ---
 csv_buffer = StringIO()
 filtered.to_csv(csv_buffer, index=False)
 st.download_button(
@@ -151,7 +148,6 @@ st.download_button(
     mime="text/csv"
 )
 
-# --- Visualizations ---
 st.subheader("Articles Over Time")
 ts = filtered.groupby(filtered["published_at"].dt.date).size()
 st.line_chart(ts)
@@ -172,7 +168,6 @@ st.dataframe(
     .rename(columns={"index": "source", "source": "Count"})
 )
 
-# --- Word Cloud ---
 st.subheader("Most Common Words")
 from collections import Counter
 import re
@@ -183,7 +178,6 @@ ax.imshow(wordcloud, interpolation="bilinear")
 ax.axis("off")
 st.pyplot(fig)
 
-# --- Headline Table ---
 st.subheader("Latest Headlines")
 st.dataframe(
     filtered.sort_values("published_at", ascending=False)[

@@ -1,5 +1,3 @@
-# src/transformer.py
-
 from typing import List, Dict
 from dateutil import parser as date_parser
 
@@ -21,12 +19,9 @@ class Transformer:
             iso_ts = None
             if raw_ts:
                 try:
-                    # date_parser.parse handles RFC- and ISO-formatted strings
                     dt = date_parser.parse(raw_ts)
-                    # force a 'Z' suffix instead of '+00:00'
                     iso_ts = dt.strftime("%Y-%m-%dT%H:%M:%SZ")
                 except Exception:
-                    # if parsing fails, drop the timestamp (or skip rec)
                     iso_ts = None
 
             out.append({

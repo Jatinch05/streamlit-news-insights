@@ -2,11 +2,12 @@ sites:
   - name: bbc
     url: https://feeds.bbci.co.uk/news/rss.xml
     parser: bbc_rss
-    rate_limit: 1  # req/sec
+
+
   - name: techcrunch
     url: https://techcrunch.com/feed/
     parser: techcrunch_rss
-    rate_limit: 1
+
     
   - name: cnn
     url: http://rss.cnn.com/rss/cnn_topstories.rss
