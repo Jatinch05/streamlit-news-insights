@@ -174,7 +174,7 @@ import re
 text = " ".join(filtered["headline"].dropna().tolist())
 wordcloud = WordCloud(width=800, height=300, background_color='black').generate(text)
 fig, ax = plt.subplots(figsize=(10, 4))
-ax.imshow(wordcloud, interpolation="bilinear")
+ax.imshow(wordcloud.to_image())
 ax.axis("off")
 st.pyplot(fig)
 
